@@ -1,0 +1,24 @@
+name: AtPlugin
+main: com.mohistmc.atplugin.AtPlugin
+version: 1.0.2
+author: LcxwsBMN
+api-version: '1.20'
+description: "@插件 - 当玩家@另一个玩家时，在对方屏幕弹出文字并显示消息"
+
+commands:
+  at:
+    description: "@一个在线玩家，可附带消息"
+    usage: /at <玩家名> [消息]
+    permission: at.use
+  atplugin:
+    description: "@插件管理命令"
+    usage: /atplugin reload
+    permission: atplugin.admin
+
+permissions:
+  at.use:
+    description: "允许使用/at命令"
+    default: true
+  atplugin.admin:
+    description: "管理@插件"
+    default: op
