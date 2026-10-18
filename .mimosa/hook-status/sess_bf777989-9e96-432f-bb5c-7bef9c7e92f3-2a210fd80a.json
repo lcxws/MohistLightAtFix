@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "mimosa-hook-status/v1",
+  "recordedAt": "2026-10-18T03:28:38.347Z",
+  "sessionId": "sess_bf777989-9e96-432f-bb5c-7bef9c7e92f3",
+  "event": "PostToolUse",
+  "toolName": "Write",
+  "file": "C:\\Users\\Lcxws\\Desktop\\我的世界插件测试！\\.readme-fix\\rank\\RankPlugin\\build.gradle",
+  "outcome": "inconclusive",
+  "coverage": "partial",
+  "findingCount": 0,
+  "durationMs": 6,
+  "hostState": "hook_complete",
+  "reportHint": ".mimosa/reports/"
+}

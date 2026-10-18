@@ -3,6 +3,9 @@
 # 是否启用插件
 enabled: true
 
+# 冷却时间（秒）：同一玩家两次 @ 之间的最短间隔，防刷屏
+cooldown-seconds: 3
+
 # 被@时弹出的标题文字（支持 & 颜色代码）
 title:
   # 主标题
@@ -12,14 +15,12 @@ title:
 
 # 聊天相关设置
 chat:
-  # 是否高亮显示消息中的 @用户名
-  highlight: true
-  # 高亮颜色
-  highlight-color: "&e"
-  # 被@者收到的私聊提醒
-  notify-message: "&e[!] &b%s &e在聊天中@了你！"
-  # @者发送成功提醒
-  sender-message: "&a✓ 已成功@ %s"
+  # 被@者收到的私聊提醒（%s = 发送者名字）
+  notify-message: "&e[!] &b%s &e@了你！"
+  # 带消息时的私聊格式（%s = 发送者名字，%m = 消息内容）
+  at-message: "&e[@] &b%s&7: &f%m"
+  # @者发送成功提醒（%s = 被@玩家名字）
+  sender-message: "&a✓ 已 @ %s"
 
 # 音效设置（被@者会听到声音）
 sound:

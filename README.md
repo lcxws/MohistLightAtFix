@@ -1,133 +1,117 @@
-MohistLightAtFix
-一个为 Mohist 核心量身定制的轻量级 @ 提及插件
-通过 /at <玩家名> [消息] 命令，精准地向指定玩家发送提醒，并触发醒目弹窗与音效，为朋友间的微型服务器提供便捷的沟通方式。
+# MohistLightAtFix（AtPlugin）
 
-✨ 特性
-命令触发 – 使用 /at <玩家名> [消息] 主动 @ 在线玩家，附带自定义消息（可选）
+一个为 **Mohist 核心**量身定制的轻量级 @ 提及插件。
+`/at <玩家名> [消息]` —— 被 @ 的玩家屏幕中央弹出标题提醒（可选音效），适合朋友服里"喊人"。
 
-醒目弹窗提醒 – 被 @ 的玩家屏幕中央会弹出主副标题，确保不遗漏
+## ✨ 特性
 
-多重通知 – 被 @ 者收到私聊提醒，@ 者收到发送成功反馈
+- **/at 命令** —— @ 任意在线玩家，可附带一条消息
+- **弹窗提醒** —— 被 @ 者屏幕中央弹出主标题 + "来自 xxx"副标题
+- **消息直达** —— 带消息时被 @ 者收到"发送者: 消息"，不带消息时收到纯提醒
+- **发送反馈** —— @ 发起者收到"已 @ xxx"确认
+- **防刷屏冷却** —— 默认 3 秒，`cooldown-seconds` 可调
+- **部分匹配** —— 输入名字前缀即可匹配在线玩家（不区分大小写）
+- **不能 @ 自己 / 不在线不可 @**
+- **音效反馈** —— 可开关，音效/音量/音调均可配置
+- **控制台日志** —— 可开关，方便查记录
+- **管理命令** —— `/atplugin reload` / `status` / `help`
+- **零依赖** —— 仅需一个 `config.yml`
 
-聊天高亮 – 支持在聊天消息中高亮显示 @玩家名（可与命令结合使用）
+## 📦 安装
 
-音效反馈 – 被 @ 时播放自定义音效（可配置开关）
+1. 从 [Releases](https://github.com/lcxws/MohistLightAtFix/releases) 下载 `AtPlugin-1.0.2.jar`
+2. 放入服务端 `plugins/` 文件夹
+3. 重启服务端（`/reload` 不推荐）
+4. 按需编辑 `plugins/AtPlugin/config.yml`
+5. 执行 `/atplugin reload` 即时生效
 
-零依赖 – 不依赖 Vault、PlaceholderAPI 或任何第三方插件
+环境要求：**Bukkit 1.20+**（在 Mohist 1.20.1 上验证；Spigot/Paper 同 API 理论可用）、Java 17。
 
-手动配置 – 通过 config.yml 自由定制标题文字、颜色、音效等所有内容
+## ⚙️ 配置文件 `config.yml`
 
-专为 Mohist 优化 – 在 Mohist 环境下稳定工作
-
-开源且轻量 – 整个插件仅几 KB，代码清晰，方便二次修改
-
-📦 安装
-下载 MohistLightAtFix-1.0.2.jar
-
-将 jar 文件放入服务端的 plugins/ 文件夹
-
-重启服务端（或使用 /reload，但建议重启）
-
-插件会自动生成 plugins/MohistLightAtFix/config.yml 配置文件
-
-按需编辑 config.yml，然后执行 /atplugin reload 重载配置
-
-⚙️ 配置文件 (config.yml)
-yaml
-# @插件配置文件
-
+```yaml
 # 是否启用插件
 enabled: true
 
+# 冷却时间（秒）：同一玩家两次 @ 之间的最短间隔
+cooldown-seconds: 3
+
 # 被@时弹出的标题文字（支持 & 颜色代码）
 title:
-  # 主标题
   text: "&e&l你被 @ 了！"
-  # 副标题格式（%s 会被替换为发送者名字）
   subtitle-format: "&f来自 &b%s &f的消息"
 
 # 聊天相关设置
 chat:
-  # 是否高亮显示消息中的 @用户名
-  highlight: true
-  # 高亮颜色
-  highlight-color: "&e"
-  # 被@者收到的私聊提醒
-  notify-message: "&e[!] &b%s &e在聊天中@了你！"
-  # @者发送成功提醒
-  sender-message: "&a✓ 已成功@ %s"
+  notify-message: "&e[!] &b%s &e@了你！"   # 无消息时，%s = 发送者名字
+  at-message: "&e[@] &b%s&7: &f%m"         # 带消息时，%s = 发送者名字，%m = 消息内容
+  sender-message: "&a✓ 已 @ %s"            # %s = 被@玩家名字
 
 # 音效设置（被@者会听到声音）
 sound:
   enabled: false
-  sound: "entity.experience_orb.pickup"
+  sound: "entity.experience_orb.pickup"    # 点号/下划线写法均可
   volume: 1.0
   pitch: 1.0
 
 # 是否在控制台记录@事件
 log-to-console: true
-字段说明
-字段	类型	默认值	说明
-enabled	布尔值	true	插件总开关
-title.text	字符串	&e&l你被 @ 了！	屏幕中央弹窗的主标题
-title.subtitle-format	字符串	&f来自 &b%s &f的消息	副标题格式，%s 替换为发送者名字
-chat.highlight	布尔值	true	是否高亮聊天中的 @ 提及
-chat.highlight-color	字符串	&e	高亮颜色
-chat.notify-message	字符串	&e[!] &b%s &e在聊天中@了你！	被@者收到的私聊提醒，%s 替换为发送者名字
-chat.sender-message	字符串	&a✓ 已成功@ %s	@者发送成功提醒，%s 替换为被@玩家名字
-sound.enabled	布尔值	false	是否在被@时播放音效
-sound.sound	字符串	entity.experience_orb.pickup	音效 ID
-sound.volume	浮点数	1.0	音量（0.0 ~ 1.0）
-sound.pitch	浮点数	1.0	音调（0.5 ~ 2.0）
-log-to-console	布尔值	true	是否在控制台记录 @ 事件
-颜色代码：使用 & 符号，例如 &e 黄色，&l 加粗，&r 重置。
+```
 
-🎮 命令与权限
-玩家命令
-命令	说明	权限	默认
-/at <玩家名> [消息]	@ 一位在线玩家，可附带自定义消息（可选）	at.use	所有玩家
+| 字段 | 默认值 | 说明 |
+|------|--------|------|
+| `enabled` | `true` | 插件总开关 |
+| `cooldown-seconds` | `3` | 同一玩家两次 @ 的最短间隔（秒） |
+| `title.text` | `&e&l你被 @ 了！` | 弹窗主标题 |
+| `title.subtitle-format` | `&f来自 &b%s &f的消息` | 副标题格式，`%s` = 发送者名字 |
+| `chat.notify-message` | `&e[!] &b%s &e@了你！` | 无消息时被 @ 者收到的提醒 |
+| `chat.at-message` | `&e[@] &b%s&7: &f%m` | 带消息时的私聊格式（`%s` 发送者，`%m` 消息） |
+| `chat.sender-message` | `&a✓ 已 @ %s` | @ 发起者的成功反馈 |
+| `sound.enabled` | `false` | 是否播放音效 |
+| `sound.sound` | `entity.experience_orb.pickup` | 音效名（Bukkit Sound） |
+| `sound.volume` / `pitch` | `1.0` / `1.0` | 音量（0.0~1.0）/ 音调（0.5~2.0） |
+| `log-to-console` | `true` | 是否在控制台记录 @ 事件 |
+
+颜色代码使用 `&`（如 `&e` 黄色、`&l` 加粗、`&r` 重置）。
+
+## 🎮 命令与权限
+
+| 命令 | 说明 | 权限 | 默认 |
+|------|------|------|------|
+| `/at <玩家名> [消息]` | @ 一位在线玩家，可附带消息 | `at.use` | 所有玩家 |
+| `/atplugin reload` | 重载 `config.yml` | `atplugin.admin` | OP |
+| `/atplugin status` | 查看运行状态与版本 | `atplugin.admin` | OP |
+| `/atplugin help` | 显示帮助 | `atplugin.admin` | OP |
+
 示例：
 
-/at Steve – 只 @ 玩家 Steve，不附带额外消息
+```
+/at Steve                     ← 只提醒 Steve
+/at Steve 来一起挖矿！          ← 提醒并附带消息
+```
 
-/at Steve 来一起挖矿！ – @ 玩家 Steve，并附带消息
+## ⚠️ 说明
 
-管理命令
-所有管理命令需 OP 权限或拥有对应权限节点。
+- **聊天内 @ 高亮已移除**（v1.0.2 起）：为避免与其他聊天类插件冲突，@ 功能只通过 `/at` 命令提供，不再拦截玩家聊天。
+- **名字匹配**：精确或前缀匹配在线玩家（不区分大小写）。
+- **音效名**：使用 Bukkit `Sound` 名，点号（`entity.experience_orb.pickup`）或下划线（`ENTITY_EXPERIENCE_ORB_PICKUP`）写法均可。
 
-命令	说明	权限	默认
-/atplugin reload	重载 config.yml 配置文件	atplugin.admin	OP
-权限节点
-权限节点	说明	默认
-at.use	允许使用 /at 命令	true（所有玩家可用）
-atplugin.admin	允许使用 /atplugin 管理命令	op
-⚠️ 已知问题与限制
-Forge 模组聊天监听失效
-由于插件通过 setCancelled(true) 拦截了原始聊天事件，所有依赖 Forge ServerChatEvent 的模组将无法监听到玩家的聊天内容。这是为了修复 Mohist 环境下 @ 功能可能失效而做出的必要牺牲。
+## 🔧 构建
 
-仅支持 Mohist 核心
-本插件专为 Mohist 1.20.1 设计，在纯 Bukkit/Spigot 或 Paper 服务端上可能无法正常工作（因为不存在 <user> 问题需要修复）。
+```bash
+./gradlew build
+# 产物: build/libs/AtPlugin-1.0.2.jar
+```
 
-玩家名匹配
-目前 /at 命令要求精确匹配在线玩家名（不区分大小写），不支持模糊匹配。
+Mohist 开发包（`com.mohistmc:mohistdev:1.20.1`）由 Gradle 自动下载。JDK 17。
 
-🔧 开发者信息
-主类：com.mohistmc.atplugin.AtPlugin
+## 📄 许可证
 
-API 版本：1.20
+[MIT](LICENSE) © 2026 Lcxws
 
-构建：无外部依赖，直接编译即可
+> 开发备注（作者原话）：核心逻辑由 AI 辅助生成，作者进行了调试、适配与集成，并在实际服务器中验证。
 
-🧠 开发备注：本插件的核心逻辑由 AI 辅助生成，作者进行了调试、适配和集成，所有代码均在指定环境中经过测试，确保稳定运行。
+## 🙏 致谢
 
-欢迎 Fork 并提交 Pull Request，但请保留原作者信息。
-
-📄 许可证
-本项目采用 MIT License 开源，你可以自由使用、修改、分发，但必须保留版权声明。
-
-🙏 致谢
-感谢 MohistMC 团队为混合端做出的努力
-
-感谢所有在 Mohist 环境下奋斗的服务器管理员
-
-🧠 特别感谢 AI 工具在代码生成和调试过程中提供的辅助支持
+- [MohistMC](https://mohistmc.com/) 团队为混合端做出的努力
+- 所有在 Mohist 环境下奋斗的服务器管理员
